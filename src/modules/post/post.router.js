@@ -1,0 +1,11 @@
+import { Router } from "express";
+import * as postController from './post.controller.js';
+const router = Router();
+router.post('/',postController.addPost);
+router.get('/',postController.getAllPost);
+router.get('/:id',postController.getPostofUser);
+router.post('/like/:id',postController.addLike);
+router.get('/like/:id',postController.getLikesOfPost);
+router.put('/:id',postController.updateDescription);
+router.delete('/:id',postController.deletePost);
+export default router;
