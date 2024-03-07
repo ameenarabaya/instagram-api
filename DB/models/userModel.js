@@ -33,7 +33,8 @@ Comments:{
 },
 token:{
     type:String
-}
+},
+
 })
 
 const userModel = model('User',userSchema);

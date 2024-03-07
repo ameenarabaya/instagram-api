@@ -15,6 +15,10 @@ UserId:{
     type:Schema.Types.ObjectId,
     require:true ,
     ref: 'User',  //referencing the User model
+},
+user:{
+    type:Schema.Types.ObjectId,
+    ref: 'User', 
 }
 })
 
