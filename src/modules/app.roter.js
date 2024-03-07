@@ -1,10 +1,8 @@
 import connection from "../../DB/connection.js";
 import postRouter from './post/post.router.js';
 import userRouter from './user/user.router.js';
-import cors from 'cors';
 const initApp = (app,express)=>{
-    connection();
-    app.use(cors());
+    connection()
 app.use(express.json());
 app.use('/users',userRouter);
 app.use('/posts',postRouter);
