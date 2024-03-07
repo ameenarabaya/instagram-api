@@ -30,6 +30,9 @@ posts:[{ type: Schema.Types.ObjectId, ref: 'Post'}],
 Comments:{
     type:Array,
     default:[]
+},
+token:{
+    type:String
 }
 })
 

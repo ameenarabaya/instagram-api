@@ -6,9 +6,11 @@ export const register = async(req,res)=>{
     try{
         let {userName,email,password} = req.body;
         const hashPassword  = await bcrypt.hash(password,8);
-        const user = await userModel.create({userName, email, password:hashPassword});
         // generate token for the new user
+        let user = await userModel.create({userName, email, password:hashPassword});
         const token = jwt.sign({_id : user._id},"LOGIN");
+        user =await userModel.findByIdAndUpdate({_id:user._id},{token});
+        // const user = await userModel.findByIdAndUpdate({userName, email, password:hashPassword});
         return res.json({massage:"success",token :token});
     } catch(error){
         return res.json(error.stack);
