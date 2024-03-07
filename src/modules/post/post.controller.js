@@ -6,9 +6,10 @@ const {image,description} = req.body;
 let {token} = req.headers;
 const decode =  jwt.verify(token,"LOGIN");
 const id = decode._id;
-const post =  await postModel.create({image,description,UserId:id});
-const user = await userModel.findByIdAndUpdate({_id:id},{ $push: { posts:post}});
-return res.json({message:"success",post})
+const user = await userModel.findById({_id:id}).select('userName avatar');
+const post =  await postModel.create({image,description,user});
+const user2 = await userModel.findByIdAndUpdate({_id:id},{ $push: { posts:post}});
+return res.json({message:"success",post:post})
 }
 export const getPostofUser = async(req,res)=>{
   let {id} = req.params;
@@ -66,7 +67,7 @@ export const addLike = async(req,res)=>{
     const decode =  jwt.verify(token,"LOGIN");
     const userid = decode._id;
     if(userid){
-    const post = await postModel.find().populate('User').exec();
+    const post = await postModel.find().populate('user');
     return res.json({posts:post});
 } return res.json({message:"you are not autharized"})
   }
