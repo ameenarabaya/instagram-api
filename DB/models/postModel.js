@@ -14,8 +14,10 @@ likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 user:{
     type:Schema.Types.ObjectId,
     ref: 'User', 
-}
-},{timestamps:true})
+},
+UserId:{
+    type: Schema.Types.ObjectId, ref: 'User'
+}},{timestamps:true})
 
 const postModel = model('Post',postSchema);
 export default postModel;

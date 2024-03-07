@@ -7,7 +7,7 @@ let {token} = req.headers;
 const decode =  jwt.verify(token,"LOGIN");
 const id = decode._id;
 const user = await userModel.findById({_id:id}).select('userName avatar');
-const post =  await postModel.create({image,description,user});
+const post =  await postModel.create({image,description,user,UserId:id});
 const user2 = await userModel.findByIdAndUpdate({_id:id},{ $push: { posts:post}});
 return res.json({message:"success",post:post})
 }
