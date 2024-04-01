@@ -1,21 +1,32 @@
 import postModel from "../../../DB/models/postModel.js";
 import jwt from 'jsonwebtoken';
 import userModel from "../../../DB/models/userModel.js";
+
+
 export const addPost = async(req,res)=>{
-const {image,description} = req.body;
+
+  // return res.json(req.file);
+  let file = req.file;
+  const description = req.body.description;
 let {token} = req.headers;
 const decode =  jwt.verify(token,"LOGIN");
 const id = decode._id;
 const user = await userModel.findById({_id:id}).select('userName avatar');
-const post =  await postModel.create({image,description,user,UserId:id});
+const post =  await postModel.create({  image: {
+  filename: file.filename,
+  path: file.path,
+  mimetype: file.mimetype
+},description,user,UserId:id});
 const user2 = await userModel.findByIdAndUpdate({_id:id},{ $push: { posts:post}});
 return res.json({message:"success",post:post})
 }
+
 export const getPostofUser = async(req,res)=>{
   let {id} = req.params;
   const posts =  await postModel.find({UserId:id});
   return res.json({posts:posts})
 }
+
 export const addLike = async(req,res)=>{
     try{
     let {token} = req.headers;
@@ -35,6 +46,8 @@ export const addLike = async(req,res)=>{
     return res.json(error.stack)
 }
   }
+
+
   export const getLikesOfPost = async(req,res)=>{
     let {id} = req.params;
     const post = await postModel.findById({_id:id}).populate('likes').exec();
@@ -52,6 +65,8 @@ export const addLike = async(req,res)=>{
     return res.json({message: "Post updated successfully"});
 } return res.json({message:"you are not autharized"})
   }
+
+
   export const deletePost = async(req,res)=>{
     let {id} = req.params; 
     const {token} = req.headers;
@@ -62,6 +77,7 @@ export const addLike = async(req,res)=>{
     return res.json({message: "Post deleted successfully"});
 } return res.json({message:"you are not autharized"})
   }
+
   export const getAllPost =async(req,res)=>{
     const {token} = req.headers;
     const decode =  jwt.verify(token,"LOGIN");
@@ -70,4 +86,15 @@ export const addLike = async(req,res)=>{
     const post = await postModel.find().populate('user');
     return res.json({posts:post});
 } return res.json({message:"you are not autharized"})
+  }
+
+
+  export const upload = (req,res)=>{
+    try{
+      let file = req.file;
+      let userName = req.body.userName;
+      return res.json({message:"success",file,userName});
+    } catch(error){
+      return res.json(error.stack);
+    }
   }

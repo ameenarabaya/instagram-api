@@ -3,8 +3,11 @@ import userModel from "./userModel.js";
 
 const postSchema = new Schema({
 image:{
-type:String,
-default:"https://instagram-clone-jenin.s3.eu-north-1.amazonaws.com/1696628128389.png"
+        filename: { type: String },
+        path: { type: String },
+        mimetype: { type: String },
+        // Add other properties as need
+        // default:"https://instagram-clone-jenin.s3.eu-north-1.amazonaws.com/1696628128389.png"
     },
 description:{
     type:String,
