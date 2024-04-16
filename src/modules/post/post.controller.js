@@ -1,22 +1,17 @@
 import postModel from "../../../DB/models/postModel.js";
 import jwt from 'jsonwebtoken';
 import userModel from "../../../DB/models/userModel.js";
+import cloudinary from "../../utility/middleware/cloudinary.js";
 
 
 export const addPost = async(req,res)=>{
-
-  // return res.json(req.file);
-  let file = req.file;
-  const description = req.body.description;
+  const {secure_url}=await cloudinary.uploader.upload(req.file.path);
+const description = req.body.description;
 let {token} = req.headers;
 const decode =  jwt.verify(token,"LOGIN");
 const id = decode._id;
 const user = await userModel.findById({_id:id}).select('userName avatar');
-const post =  await postModel.create({  image: {
-  filename: file.filename,
-  path: file.path,
-  mimetype: file.mimetype
-},description,user,UserId:id});
+const post =  await postModel.create({image:secure_url,description,user,UserId:id});
 const user2 = await userModel.findByIdAndUpdate({_id:id},{ $push: { posts:post}});
 return res.json({message:"success",post:post})
 }
