@@ -6,4 +6,5 @@ router.post('/signup',userController.register);
 router.post('/login',userController.login);
 router.patch('/update',userController.updateUser);
 router.delete('/delete',userController.deleteUser);
+router.get('/searchUser/:userName',userController.getUserByName);
 export default router;
